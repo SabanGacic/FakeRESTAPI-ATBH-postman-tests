@@ -1,0 +1,1239 @@
+{
+  "info": {
+    "_postman_id": "21965da0-4b97-4ee1-b4a9-181e949316a8",
+    "name": "FakeRESTAPI Demo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54071164",
+    "_collection_link": "https://go.postman.co/collection/54071164-21965da0-4b97-4ee1-b4a9-181e949316a8?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authors_ValidScenarios",
+      "item": [
+        {
+          "name": "Get all authors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200); \r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is not empty\",function(){\r",
+                  "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is JSON\",function(){\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Response is array\",function(){\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data).to.be.an(\"array\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Authors",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Author",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const randomId = Math.floor(Math.random() * 100000);\r",
+                  "pm.environment.set(\"randomAuthorId\", randomId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is successful\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Created Author firstName is Amer\",function() {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.firstName).to.eql(\"Amer\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Created Author lastName is Civic\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.lastName).to.eql(\"Civic\");\r",
+                  "});\r",
+                  "\r",
+                  "const data = pm.response.json();\r",
+                  "pm.environment.set(\"authorId\", data.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": {{randomAuthorId}},\r\n  \"idBook\": 11,\r\n  \"firstName\": \"Amer\",\r\n  \"lastName\": \"Civic\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Authors",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get authors by book id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is JSON array\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data).to.be.an(\"array\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Authors/authors/books/11",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "authors",
+                "books",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get author by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Returned author id is 11\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.id).to.eql(11);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Authors/11",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update author",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is successful\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Updated author id matches saved variable\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.id).to.eql(Number(pm.environment.get(\"authorId\")));\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"First name updated\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.firstName).to.eql(\"Amerino\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Last name updated\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.lastName).to.eql(\"Civicino\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": {{authorId}},\r\n  \"idBook\": 11,\r\n  \"firstName\": \"Amerino\",\r\n  \"lastName\": \"Civicino\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Authors/{{authorId}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "{{authorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get author by returned id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Returned author id matches saved variable\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.id).to.eql(Number(pm.environment.get(\"authorId\")));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Authors/{{authorId}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "{{authorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete author",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Delete request is successful\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Authors/{{authorId}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "{{authorId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authors_InValidScenarios",
+      "item": [
+        {
+          "name": "Get invalid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Authors/999999",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get invalid oversized ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Authors/9999999999",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "9999999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Post missing field",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Invalid request handled\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 500]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 123,\r\n  \"idBook\": 10,\r\n  \"firstName\": \"Amer\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Authors",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Post invalid type",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const randomId = Math.floor(Math.random() * 100000);\r",
+                  "pm.environment.set(\"randomAuthorId\", randomId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Invalid data type handled\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 500]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\":\"abc\",\r\n  \"idBook\": 15,\r\n  \"firstName\": \"Amer\",\r\n  \"lastName\": \"Civic\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Authors",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Put invalid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Update non-existing author\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 404, 500]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 999999,\r\n  \"idBook\": 10,\r\n  \"firstName\": \"Amerino\",\r\n  \"lastName\": \"Merino\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Authors/999979",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "999979"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete non-existing author",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Delete non-existing author\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Authors/9999654",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authors",
+                "9999654"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get authors invalid endpoint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Authorz",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authorz"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Books_InvalidScenarios",
+      "item": [
+        {
+          "name": "Get invalid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Books/999999",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Post missing field",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Invalid request handled\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 500]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 101,\r\n  \"description\": \"Neka knjiga\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Books",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Post invalid date",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"API should reject invalid date format\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 105,\r\n  \"title\": \"NevALJA NAziv KnjiGE\",\r\n  \"description\": \"Testiramo invalid datum\",\r\n  \"pageCount\": 200,\r\n  \"excerpt\": \"Test excerpt\",\r\n  \"publishDate\": \"invalid-date\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Books",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Post invalid type",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const randomId = Math.floor(Math.random() * 100000);\r",
+                  "pm.environment.set(\"randomAuthorId\", randomId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Invalid data type handled\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 500]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 102,\r\n  \"title\": \"Testni\",\r\n  \"description\": \"Testna\",\r\n  \"pageCount\": \"abc\",\r\n  \"excerpt\": \"testni\",\r\n  \"publishDate\": \"2026-01-03\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Books",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Put invalid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Update non-existing books\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 404, 500]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 999999,\r\n  \"title\": \"Testni\",\r\n  \"description\": \"Testna\",\r\n  \"pageCount\": 100,\r\n  \"excerpt\": \"test\",\r\n  \"publishDate\": \"2026-01-03\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Books/999979",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books",
+                "999979"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete non-existing book",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Delete non-existing book\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Books/999999",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get books invalid endpoint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Authorz",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Authorz"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Books_ValidScenarios",
+      "item": [
+        {
+          "name": "Get all books",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is not empty\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is an array\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data).to.be.an(\"array\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Books",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create book",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const randomBookId = Math.floor(Math.random() * 100000);\r",
+                  "pm.environment.set(\"randomBookId\", randomBookId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is successful\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Created book title is correct\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.title).to.eql(\"Amerova Knjiga\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Created book pageCount is correct\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.pageCount).to.eql(250);\r",
+                  "});\r",
+                  "\r",
+                  "const data = pm.response.json();\r",
+                  "pm.environment.set(\"bookId\", data.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": {{randomBookId}},\r\n  \"title\": \"Amerova Knjiga\",\r\n  \"description\": \"Ovu knjigu sam napisao ja(Amerko)\",\r\n  \"pageCount\": 250,\r\n  \"excerpt\": \"I have no idea\",\r\n  \"publishDate\": \"2026-04-21T15:55:02.624Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Books",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get book by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Returned book id is 9\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.id).to.eql(9);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Books/9",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update book",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is successful\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Updated title is correct\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.title).to.eql(\"Amerkova knjiga nova edition2 \");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Updated pageCount is correct\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.pageCount).to.eql(300);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": {{bookId}},\r\n  \"title\": \"Amerkova knjiga nova edition2 \",\r\n  \"description\": \"Nastavak knjige 2\",\r\n  \"pageCount\": 300,\r\n  \"excerpt\": \"Updated this excerpt\",\r\n  \"publishDate\": \"2026-04-21T16:15:02.624Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/Books/{{bookId}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books",
+                "{{bookId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete book",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Delete request is successful\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Books/{{bookId}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books",
+                "{{bookId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get books by returned id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Returned book id matches saved variable\", function () {\r",
+                  "    const data = pm.response.json();\r",
+                  "    pm.expect(data.id).to.eql(Number(pm.environment.get(\"bookId\")));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/Books/{{bookId}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "Books",
+                "{{bookId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
